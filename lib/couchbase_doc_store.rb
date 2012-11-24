@@ -5,7 +5,7 @@ require "couchbase_doc_store/version"
 
 module CouchbaseDocStore
 
-  Rails.logger.debug(CouchbaseSetting.pm)
+  #Rails.logger.debug(CouchbaseSetting.pm)
   
   setting_hash = {}      
   if (CouchbaseSetting.respond_to?("servers") && CouchbaseSetting.servers && !CouchbaseSetting.servers.empty?)
