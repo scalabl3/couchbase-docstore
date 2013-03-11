@@ -1,31 +1,35 @@
 require 'couchbase'
 require 'map'
-require 'couchbase_settings'
 require "couchbase_doc_store/version"
 
 module CouchbaseDocStore
 
   #Rails.logger.debug(CouchbaseSetting.pm)
   
-  setting_hash = {}      
-  if (CouchbaseSetting.respond_to?("servers") && CouchbaseSetting.servers && !CouchbaseSetting.servers.empty?)
-    setting_hash[:node_list] = CouchbaseSetting.servers 
-  elsif CouchbaseSetting.respond_to?("server")
-    
-    setting_hash[:hostname] = CouchbaseSetting.server 
-  else
-    raise ArgumentError, "You didn't set a Couchbase Server in your /config/couchbase.yml file!"
-  end
-  setting_hash[:pool] = "default"
-  setting_hash[:bucket] = CouchbaseSetting.bucket
-  setting_hash[:port] = 8091
+  if defined? (CouchbaseSetting)
+    setting_hash = {}      
+    if (CouchbaseSetting.respond_to?("servers") && CouchbaseSetting.servers && !CouchbaseSetting.servers.empty?)
+      setting_hash[:node_list] = CouchbaseSetting.servers 
+    elsif CouchbaseSetting.respond_to?("server")
+      setting_hash[:hostname] = CouchbaseSetting.server 
+    else
+      raise ArgumentError, "You didn't set a Couchbase Server in your /config/couchbase.yml file!"
+    end
+    setting_hash[:pool] = "default"
+    setting_hash[:bucket] = CouchbaseSetting.bucket
+    setting_hash[:port] = 8091
   
-  if (CouchbaseSetting.respond_to?("password") && CouchbaseSetting.password && !CouchbaseSetting.password.blank?)
-    setting_hash[:username] = CouchbaseSetting.bucket
-    setting_hash[:password] = CouchbaseSetting.password
+    if (CouchbaseSetting.respond_to?("password") && CouchbaseSetting.password && !CouchbaseSetting.password.blank?)
+      setting_hash[:username] = CouchbaseSetting.bucket
+      setting_hash[:password] = CouchbaseSetting.password
+    end
   end
+  
+  CB = nil
   
   CB = Couchbase.connect(setting_hash)
+  
+  puts CB.inspect
   
   #### INSTANCE METHODS
 
