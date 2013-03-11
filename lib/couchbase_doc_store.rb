@@ -97,7 +97,31 @@ module CouchbaseDocStore
   #### CLASS METHODS
 
   class << self
+    
+    def connect!(setting_hash = {hostname: "127.0.0.1", bucket: "default"})
+      if defined? (CouchbaseSetting)
+        if (CouchbaseSetting.respond_to?("servers") && CouchbaseSetting.servers && !CouchbaseSetting.servers.empty?)
+          setting_hash[:node_list] = CouchbaseSetting.servers 
+        elsif CouchbaseSetting.respond_to?("server")
+          setting_hash[:hostname] = CouchbaseSetting.server 
+        else
+          raise ArgumentError, "You didn't set a Couchbase Server in your /config/couchbase.yml file!"
+        end
+        setting_hash[:pool] = "default"
+        setting_hash[:bucket] = CouchbaseSetting.bucket
+        setting_hash[:port] = 8091
 
+        if (CouchbaseSetting.respond_to?("password") && CouchbaseSetting.password && !CouchbaseSetting.password.blank?)
+          setting_hash[:username] = CouchbaseSetting.bucket
+          setting_hash[:password] = CouchbaseSetting.password
+        end
+      end
+
+      CB = Couchbase.connect(setting_hash)
+
+      puts CB.inspect
+    end
+    
     def delete_all_documents!
       CB.flush
     end

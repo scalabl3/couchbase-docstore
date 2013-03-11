@@ -12,8 +12,8 @@ Gem::Specification.new do |gem|
   gem.summary       = %q{You simply use the Couchbase gem, or you can use this wrapper that encapsulates the gem and adds some subjective conveniences. }
   gem.homepage      = "https://github.com/scalabl3/couchbase-docstore"
 
-  gem.add_dependency('couchbase-settings', '>= 0.1.0')
-  gem.add_dependency('couchbase', '>= 1.2.0.z.beta3')
+  gem.add_dependency('couchbase-settings', '>= 0.1.4')
+  gem.add_dependency('couchbase', '>= 1.2')
   
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
